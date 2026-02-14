@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BlueLane | Swimming Time Analyzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-wave wave-a"></div>
+    <div class="bg-wave wave-b"></div>
+
+    <header class="topbar shell">
+      <div class="brand">
+        <span class="dot"></span>
+        <span>BlueLane</span>
+      </div>
+      <a href="#about" class="ghost-link">How it works</a>
+    </header>
+
+    <main class="shell">
+      <section class="hero">
+        <p class="pill">Math × Computer Science for Swim Training</p>
+        <h1>Analyze swim splits from video or image data and find pace drop-off patterns.</h1>
+        <p class="hero-copy">
+          BlueLane turns raw race evidence into clean split analytics. Use frame-based event
+          detection (video) or image OCR fallback (where available) to estimate lap timing,
+          then compute consistency, trend slope, and algorithmic confidence.
+        </p>
+      </section>
+
+      <section class="grid">
+        <article class="card controls">
+          <h2>Input Mode</h2>
+          <label>
+            Analyzer Source
+            <select id="mode">
+              <option value="splits" selected>Manual Splits</option>
+              <option value="video">Video Frame Analyzer</option>
+            </select>
+          </label>
+
+          <div id="splitsPanel" class="mode-panel">
+            <label>
+              Pool Length (meters)
+              <input id="poolLength" type="number" min="10" step="5" value="25" />
+            </label>
+            <label>
+              Event Distance (meters)
+              <input id="distance" type="number" min="25" step="25" value="100" />
+            </label>
+            <label>
+              Enter Split Times (seconds, comma separated)
+              <textarea id="splitsInput" rows="4">15.4, 16.1, 16.8, 17.5</textarea>
+            </label>
+            <button id="analyzeSplitsBtn">Analyze Splits</button>
+          </div>
+
+          <div id="videoPanel" class="mode-panel hidden">
+            <label>
+              Upload race video (mp4/webm)
+              <input id="videoFile" type="file" accept="video/*" />
+            </label>
+            <label>
+              Frames per second to sample
+              <input id="sampleRate" type="number" min="4" max="30" value="12" />
+            </label>
+            <label>
+              Wall-contact sensitivity
+              <input id="sensitivity" type="number" min="5" max="100" value="32" />
+            </label>
+            <p class="hint">
+              After loading video, scrub to a frame where the swimmer is at the wall and click
+              "Calibrate Wall Zone".
+            </p>
+            <button id="calibrateBtn">Calibrate Wall Zone</button>
+            <button id="analyzeVideoBtn">Analyze Video</button>
+            <video id="videoPreview" controls muted></video>
+            <canvas id="scanCanvas" width="780" height="220"></canvas>
+          </div>
+        </article>
+
+        <article class="card viz">
+          <h2>Pace Trend + Variability</h2>
+          <canvas id="plot" width="920" height="340"></canvas>
+          <p class="caption">Blue: split duration • Cyan: trend line</p>
+
+          <h3>Optional Image Recognition (experimental)</h3>
+          <label>
+            Upload split-sheet image
+            <input id="imageFile" type="file" accept="image/*" />
+          </label>
+          <button id="ocrBtn">Extract Text (if browser supports OCR)</button>
+          <p id="ocrOutput" class="hint"></p>
+        </article>
+
+        <article class="card metrics">
+          <h2>Computed Metrics</h2>
+          <div id="stats" class="stats"></div>
+          <h3>CS Lens</h3>
+          <p id="algoNotes"></p>
+          <h3>Training Suggestion</h3>
+          <p id="studyPrompt"></p>
+        </article>
+      </section>
+
+      <section class="about card" id="about">
+        <h2>What makes this project different?</h2>
+        <p>
+          BlueLane combines applied statistics and algorithm design for swim performance.
+          You are not only charting times—you are building a pipeline: signal input, event
+          detection, data cleaning, and trend inference.
+        </p>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
